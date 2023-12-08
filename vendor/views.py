@@ -10,18 +10,18 @@ from django.db.models import Q
 
 # Create your views here.
 class VendorView(generics.ListCreateAPIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Vendor.objects.all()
     serializer_class = VendorSerializer
 
 class VendorDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Vendor.objects.all()
     serializer_class = VendorSerializer
     lookup_field = 'id'
 
 class PurchaseOrderView(generics.ListCreateAPIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = PurchaseOrder.objects.all()
     serializer_class = PurchaseOrderCreateSerializer
 
@@ -38,13 +38,15 @@ class PurchaseOrderView(generics.ListCreateAPIView):
 
 class PurchaseOrderCRUDView(generics.RetrieveUpdateDestroyAPIView):
 
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = PurchaseOrder.objects.all()
     serializer_class = PurchaseOrderSerializer
     lookup_field = 'id'
 
 
 class POAknowledgeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, id):
         try:
             purchase_order = PurchaseOrder.objects.get(id=id)
@@ -63,10 +65,12 @@ class POAknowledgeView(APIView):
                 
                 serializer = PurchaseOrderSerializer(purchase_order)
                 return Response(serializer.data)
-            return Response({'message':'already acknowledged'})
-
+            return Response({'message':'already acknowledged'}, status=404)
+        except PurchaseOrder.DoesNotExist:
+            return Response({'message': 'Purchase Order not found'}, status=404)
         except Exception as e:
             print(e)
+            return Response({'message': 'An error occurred'}, status=500)
 
 #for finding the average response time
 def average_response_time(issue, aknowledge, purchase_order):
@@ -76,6 +80,8 @@ def average_response_time(issue, aknowledge, purchase_order):
 
 
 class PODevliveryView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, id):
         try:
             purchase_order = PurchaseOrder.objects.get(id=id)   
@@ -100,8 +106,12 @@ class PODevliveryView(APIView):
                 serializer = PurchaseOrderSerializer(purchase_order)
                 return Response(serializer.data)
             return Response({'message':'already delivered'})
-        except:
-            pass
+        except PurchaseOrder.DoesNotExist:
+            return Response({'message': 'Purchase Order not found'}, status=404)
+        except Exception as e:
+            # Log the exception
+            print(e)
+            return Response({'message': 'An error occurred'}, status=500)
 
 
 def get_on_time_delivery_rate(purchase_order):
@@ -128,6 +138,8 @@ def get_fulfillment_rate(purchase_order):
 
 
 class PORatingView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, id):
         try:
             purchase_order = PurchaseOrder.objects.get(id=id)
@@ -151,8 +163,13 @@ class PORatingView(APIView):
             serializer = PurchaseOrderSerializer(purchase_order)
             return Response(serializer.data)
 
+        except PurchaseOrder.DoesNotExist:
+            return Response({'message': 'Purchase Order not found'}, status=404)
         except Exception as e:
+            # Log the exception
             print(e)
+            return Response({'message': 'An error occurred'}, status=500)
+
             
 
 def get_quality_rating_avg(purchase_order, quality_rating):
@@ -168,7 +185,7 @@ def get_quality_rating_avg(purchase_order, quality_rating):
     return new_avg
 
 class VendorPerformanceView(generics.RetrieveAPIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Performance.objects.all()
     serializer_class = PerfomanceSerializer
     lookup_field = 'id'
