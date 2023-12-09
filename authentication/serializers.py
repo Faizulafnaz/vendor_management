@@ -3,6 +3,7 @@ from vendor.models import Vendor, Performance
 from rest_framework.serializers import ModelSerializer, ValidationError
 import uuid
 
+
 class UserRegisterSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -22,7 +23,7 @@ class UserRegisterSerializer(ModelSerializer):
         instance = self.Meta.model(**validated_data)
 
         vendor_code = str(uuid.uuid4())[:8]
-
+        instance.is_vendor = True
         if password is not None:
             instance.set_password(password)
         instance.save()
