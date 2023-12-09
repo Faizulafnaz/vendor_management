@@ -34,12 +34,12 @@ All API endpoints require authentication. To access protected endpoints, clients
 **Endpoint:** `/signup/`
 
 - **Method:** `POST`
-- **Description:** Register a new user.
+- **Description:** Register a new user. This is how creating a new vendor. this endpoint automatically create vendor profile and user profile at the same time.
 - **Request:**
   - Parameters:
     - `username`: New user's username.
     - `password`: New user's password.
-    - Add any additional user registration parameters if required.
+    - 
 - **Response:**
   - Successful response:
     ```json
@@ -54,12 +54,8 @@ All API endpoints require authentication. To access protected endpoints, clients
 
 **Endpoint:** `/vendors/`
 
-- **Method:** `GET` (List Vendors), `POST` (Create Vendor)
-- **Description:** List all vendors or create a new vendor.
-- **Request:** (For `POST` method)
-  - Parameters:
-    - `name`: Vendor name.
-    - Add any additional vendor creation parameters if required.
+- **Method:** `GET` (List Vendors)
+- **Description:** List all vendors.
 - **Response:**
   - Successful response (For `GET` method):
     ```json
