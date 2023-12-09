@@ -44,13 +44,17 @@ All API endpoints require authentication. To access protected endpoints, clients
   - Successful response:
     ```json
     {
-      "message": "User registered successfully"
+    "username": "faizulafnaz",
+    "first_name": "",
+    "is_superuser": false,
+    "email": "",
+    "is_vendor": true
     }
     ```
 
 ## Vendors
 
-### List and Create Vendors
+### List Vendors
 
 **Endpoint:** `/vendors/`
 
@@ -69,23 +73,14 @@ All API endpoints require authentication. To access protected endpoints, clients
       // ... other vendors
     ]
     ```
-  - Successful response (For `POST` method):
-    ```json
-    {
-      "id": 2,
-      "name": "Vendor 2",
-      "other_field": "value"
-      // Additional vendor fields
-    }
-    ```
 
 ### Retrieve, Update, and Delete Vendor
 
 **Endpoint:** `/vendors/<int:id>/`
 
-- **Method:** `GET` (Retrieve), `PUT` (Update), `DELETE` (Delete)
+- **Method:** `GET` (Retrieve), `PATCH` (Update), `DELETE` (Delete)
 - **Description:** Retrieve, update, or delete a specific vendor by ID.
-- **Request:** (For `PUT` method)
+- **Request:** (For `PATCH` method)
   - Parameters:
     - `name`: Updated vendor name.
     - Update any additional vendor parameters if required.
@@ -223,7 +218,7 @@ All API endpoints require authentication. To access protected endpoints, clients
     ```json
     {
       "vendor_id": 1,
-      "average_response_time": 24.5,
+      "average_response_time": 5,
       "on_time_delivery_rate": 85.5,
       "fulfillment_rate": 92.3,
       "quality_rating_avg": 8.7,
